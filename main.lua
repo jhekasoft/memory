@@ -33,6 +33,7 @@ main = room {
 	enter = function()
 		set_music('music/night.ogg'); --04.ogg
 	end,
+	pic = 'images/main.png',
 }
 
 veranda_screen = room {
@@ -147,7 +148,7 @@ gun = obj {
 
 darkness = obj {
 	nam = 'тьма',
-	dsc = [[Вокруг меня кромещая {тьма}.]],
+	dsc = [[Вокруг меня кромешная {тьма}.]],
 	act = [[Очень страшно здесь находиться. Мне очень страшно...]],
 }
 

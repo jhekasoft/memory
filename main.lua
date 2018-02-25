@@ -1,19 +1,25 @@
--- $Name:Память$
--- $Version:0.3$
+-- $Name: Память$
+-- $Version: 0.4$
+-- $Author: Евгений Ефремов aka jhekasoft$
+-- $E-mail: jhekasoft@gmail.com$
+-------------
+-- fixed code\conv\spell\form\tags
+-- nov 25, 2013  j-maks (jmaksima_at_gmail_dot_com)
+-------------
 instead_version "1.5.3"
-
+-------------
 require "hideinv"
 require "para"
 require "quotes"
 require "dash"
 require "xact"
 require "theme"
-
+-------------
 game.codename = 'UTF-8';
 game.act = 'Странно...';
 game.inv = 'Хм...';
 game.use = 'Нет.';
-
+-------------
 main = room {
 	nam = 'Ночь...',
 	dsc = [[Что происходит?! Я убегаю. В руках оружие. Обрез.
@@ -35,7 +41,7 @@ main = room {
 	end,
 	pic = 'images/main.png',
 }
-
+-------------
 veranda_screen = room {
 	nam = 'Веранда',
 	dsc = [[Подбегаю к дому.^^
@@ -46,7 +52,7 @@ veranda_screen = room {
 		xact('goto_intobuild', code[[walk(intobuild_screen);]]),
 	},
 }
-
+-------------
 intobuild_screen = room {
 	nam = 'Дом',
 	dsc = [[Я в доме. Здесь очень темно. Но всё же видны силуэты
@@ -59,7 +65,7 @@ intobuild_screen = room {
 		xact('goto_basement', code[[walk(basement_screen)]]),
 	},
 }
-
+-------------
 basement_screen = room {
 	nam = 'Погреб',
 	dsc = [[Я прихожу в сознание... Я цел. Правда болит голова.
@@ -76,7 +82,7 @@ basement_screen = room {
 		stop_music();
 	end,
 }
-
+-------------
 memory_screen = room {
 	nam = 'Память',
 	dsc = [[Игра создана в рамках конкурса Вжж!^^
@@ -92,7 +98,7 @@ memory_screen = room {
 		set_music('music/memory.ogg');
 	end,
 }
-
+-------------
 basement = room {
 	nam = 'Погреб',
 	dsc = [[Я стою в погребе. Чувствуется противный запах. Возможно
@@ -104,7 +110,7 @@ basement = room {
 		set_music('music/fear.ogg');
 	end,
 }
-
+-------------
 clothes = obj {
 	nam = 'одежда',
 	inv = function(s)
@@ -123,7 +129,7 @@ clothes = obj {
 		end
 	end,
 }
-
+-------------
 gun = obj {
 	var {
 		charged = true;
@@ -143,25 +149,25 @@ gun = obj {
 		end
 	end,
 }
-
+-------------
 darkness = obj {
 	nam = 'тьма',
 	dsc = [[Вокруг меня кромешная {тьма}.]],
 	act = [[Очень страшно здесь находиться. Мне очень страшно...]],
 }
-
+-------------
 basement_door = obj {
 	nam = 'дверь погреба',
 	dsc = [[Вверху открытая {дверца погреба}. ]],
 	act = [[Из неё доносится очень тусклый свет. Странно, но никакой лестницы
 к ней нет. Поэтому не дотянуться. Возможно лестницу кто-то специально снял.]],
 }
-
+-------------
 candle = obj {
 	nam = 'свеча',
 	inv = [[Обычная свеча из воска. Уже использовалась, но ещё много осталось.]],
 }
-
+-------------
 matchbox = obj {
 	var {
 		notempty = true;
@@ -188,12 +194,12 @@ matchbox = obj {
 		end
 	end,
 }
-
+-------------
 fork = obj {
 	nam = 'вилка',
 	inv = [[Алюминиевая пищевая вилка. Может ещё пригодится.]],
 }
-
+-------------
 table = obj {
 	var {
 		searched = false;
@@ -213,7 +219,7 @@ table = obj {
 		end
 	end,
 }
-
+-------------
 rope = obj {
 	nam = 'верёвка',
 	inv = [[Верёвка. На одном конце есть металлический крюк.]],
@@ -224,7 +230,7 @@ rope = obj {
 		end
 	end,
 }
-
+-------------
 radio = obj {
 	var {
 		listened = false;
@@ -244,7 +250,7 @@ radio = obj {
 		end
 	end,
 }
-
+-------------
 closet = obj {
 	var {
 		opened = false;
@@ -273,25 +279,25 @@ closet = obj {
 		end
 	end
 }
-
+-------------
 pot = obj {
 	nam = 'кастрюля',
 	dsc = [[На полу стоит {кастрюля}.]],
 	act = [[Вот она! Из-за неё я упал!]];
 }
-
+-------------
 goto_hayloft = obj {
 	nam = 'к сеновалу',
 	dsc = [[{Пойти к сеновалу.}]],
 	act = code[[walk(hayloft_screen)]];
 }
-
+-------------
 build_kitchen = room {
 	nam = 'Кухня',
 	dsc = [[Кухня. Это точно кухня.]],
 	obj = {'pot'},
 }
-
+-------------
 hayloft_screen = room {
 	nam = 'Сеновал',
 	dsc = [[Сеновал действительно оказался за домом. И там я встретил людей.
@@ -313,13 +319,13 @@ hayloft_screen = room {
 		set_music('music/hayloft.ogg');
 	end,
 }
-
+-------------
 people = obj {
 	nam = 'люди',
 	dsc = [[Передо мной спорят {люди}.]],
 	act = [[Они решают убивать меня или нет.]],
 }
-
+-------------
 log = obj {
 	nam = 'бревно',
 	dsc = [[Слева лежит {бревно}.]],
@@ -331,19 +337,19 @@ log = obj {
 		end
 	end,
 }
-
+-------------
 run_away = obj {
 	nam = 'убежать',
 	dsc = [[Можно попытаться {убежать}.]],
 	act = code[[walk(bad_end)]],
 }
-
+-------------
 hayloft = room {
 	nam = 'Сеновал',
 	dsc = [[Сеновал. Довольно просторный сарай с сеном.]],
 	obj = {'people', 'log', 'run_away'},
 }
-
+-------------
 bad_end = room {
 	nam = 'Конец',
 	dsc = [[Я попытался убежать. Но раздались выстрелы. Я упал...^^
@@ -352,7 +358,7 @@ bad_end = room {
 		xact('back_hayloft', code[[walk(hayloft)]]),
 	},
 }
-
+-------------
 log_eat_screen = room {
 	nam = 'Бревно';
 	dsc = [[Я схватил вилку и начал ей отколупывать кору бревна и есть её.
@@ -365,7 +371,7 @@ log_eat_screen = room {
 		set_music('music/memory.ogg');
 	end,
 }
-
+-------------
 happy_end = room {
 	nam = 'Конец',
 	dsc = [[Я проснулся в больничной палате. Моя память была на месте.
@@ -378,7 +384,7 @@ happy_end = room {
 {goto_end|Конец}.]],
 	obj = {xact('goto_end', code[[walk(the_end);]])},
 }
-
+-------------
 the_end = room {
 	nam = 'Конец',
 	dsc = [[Автор: Евгений Ефремов (Jhekasoft)^^

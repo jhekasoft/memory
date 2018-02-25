@@ -104,9 +104,6 @@ basement = room {
 }
 
 clothes = obj {
-	var {
-		remember = false;
-	},
 	nam = 'одежда',
 	inv = function(s)
 		p 'Моя одежда: футболка и шорты.';
@@ -116,7 +113,6 @@ clothes = obj {
 её делали какой-то краской. Точнее, это символ, а уже под ним надпись. Но
 разглядеть в такой темноте невозможно ничего.]];
 		else
-			s.remember = true;
 			put('goto_hayloft', 'build_kitchen');
 			p [[На футболке символ анархии: "А" в круге. Под ним подпись:
 "Anvan". Не знаю, что значит подпись, но кажется я анархист. Сеновал...
@@ -197,7 +193,7 @@ fork = obj {
 }
 
 table = obj {
-	var = {
+	var {
 		searched = false;
 	},
 	nam = 'стол',
@@ -228,7 +224,7 @@ rope = obj {
 }
 
 radio = obj {
-	var = {
+	var {
 		listened = false;
 	},
 	nam = 'радиоприёмник',
@@ -348,7 +344,11 @@ hayloft = room {
 
 bad_end = room {
 	nam = 'Конец',
-	dsc = [[Я попытался убежать. Но раздались выстрелы. Я упал...]],
+	dsc = [[Я попытался убежать. Но раздались выстрелы. Я упал...^^
+{back_hayloft|Переиграть}.]],
+	obj = {
+		xact('back_hayloft', code[[walk(hayloft)]]),
+	},
 }
 
 log_eat_screen = room {
@@ -357,14 +357,14 @@ log_eat_screen = room {
 Тот первый из них закричал:^^
 -- Видите! Он безопасен! Он проявляет агрессию к бревну! К коре дерева!^^
 Послышались возражения, но я продолжал активно пытаться есть кору бревна.^^
-Меня {goto_good_end|оглушили ударом по голове}.]],
-	obj = {xact('goto_good_end', code[[walk(good_end);]])},
+Меня {goto_happy_end|оглушили ударом по голове}.]],
+	obj = {xact('goto_happy_end', code[[walk(happy_end);]])},
 	enter = function()
 		set_music('music/memory.ogg'); --02.ogg
 	end,
 }
 
-good_end = room {
+happy_end = room {
 	nam = 'Конец',
 	dsc = [[Я проснулся в больничной палате. Моя память была на месте.
 Передо мной сидел Иван. Он улыбался. Из его глаз текли слёзы. Я всё понял.

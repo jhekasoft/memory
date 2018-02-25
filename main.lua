@@ -1,5 +1,5 @@
 -- $Name:Память$
--- $Version:0.1$
+-- $Version:0.3$
 instead_version "1.5.3"
 
 require "hideinv"
@@ -31,7 +31,7 @@ main = room {
 		xact('goto_build', code[[walk(veranda_screen);]]),
 	},
 	enter = function()
-		set_music('music/night.ogg'); --04.ogg
+		set_music('music/night.ogg');
 	end,
 	pic = 'images/main.png',
 }
@@ -82,12 +82,14 @@ memory_screen = room {
 	dsc = [[Игра создана в рамках конкурса Вжж!^^
 Автор: Евгений Ефремов (Jhekasoft)^^
 15-16 августа, 2012 год^^
+Позже, уже после конкурса, были добавлены изображения и тема оформления.^^
+Дата последнего релиза: 25.02.2018.^^
 {start|Начать}]],
 	obj = {
 		xact('start', code[[walk(basement)]]),
 	},
 	enter = function()
-		set_music('music/memory.ogg'); --02.ogg
+		set_music('music/memory.ogg');
 	end,
 }
 
@@ -99,7 +101,7 @@ basement = room {
 	enter = function()
 		take('clothes');
 		take('gun');
-		set_music('music/fear.ogg'); --01.ogg
+		set_music('music/fear.ogg');
 	end,
 }
 
@@ -308,7 +310,7 @@ hayloft_screen = room {
 		xact('start_hayloft', code[[walk(hayloft)]]),
 	},
 	enter = function()
-		set_music('music/hayloft.ogg'); --03.ogg
+		set_music('music/hayloft.ogg');
 	end,
 }
 
@@ -360,7 +362,7 @@ log_eat_screen = room {
 Меня {goto_happy_end|оглушили ударом по голове}.]],
 	obj = {xact('goto_happy_end', code[[walk(happy_end);]])},
 	enter = function()
-		set_music('music/memory.ogg'); --02.ogg
+		set_music('music/memory.ogg');
 	end,
 }
 
@@ -378,7 +380,7 @@ happy_end = room {
 }
 
 the_end = room {
-	nam = 'Память -- Конец',
+	nam = 'Конец',
 	dsc = [[Автор: Евгений Ефремов (Jhekasoft)^^
 Спасибо Instead за движок, а Вжж! за бессонную ночь :)]],
 }

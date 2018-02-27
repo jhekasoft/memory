@@ -1,5 +1,5 @@
 -- $Name: Память$
--- $Version: 0.4$
+-- $Version: 1.0$
 -- $Author: Евгений Ефремов aka jhekasoft$
 -- $E-mail: jhekasoft@gmail.com$
 -------------
@@ -51,6 +51,7 @@ veranda_screen = room {
 	obj = {
 		xact('goto_intobuild', code[[walk(intobuild_screen);]]),
 	},
+	pic = 'images/veranda.png',
 }
 -------------
 intobuild_screen = room {
@@ -64,6 +65,7 @@ intobuild_screen = room {
 	obj = {
 		xact('goto_basement', code[[walk(basement_screen)]]),
 	},
+	pic = 'images/kitchen.png',
 }
 -------------
 basement_screen = room {
@@ -80,7 +82,9 @@ basement_screen = room {
 	},
 	enter = function()
 		stop_music();
+		set_sound('sounds/pot.ogg');
 	end,
+	pic = 'images/empty.png',
 }
 -------------
 memory_screen = room {
@@ -89,14 +93,15 @@ memory_screen = room {
 Автор: Евгений Ефремов (Jhekasoft)^^
 15-16 августа, 2012 год^^
 Позже, уже после конкурса, были добавлены изображения и тема оформления.^^
-Дата последнего релиза: 25.02.2018.^^
-{start|Начать}]],
+Дата последнего релиза: 27.02.2018.^^
+{start|Начать ►}]],
 	obj = {
 		xact('start', code[[walk(basement)]]),
 	},
 	enter = function()
 		set_music('music/memory.ogg');
 	end,
+	pic = 'images/title.png',
 }
 -------------
 basement = room {
@@ -109,10 +114,19 @@ basement = room {
 		take('gun');
 		set_music('music/fear.ogg');
 	end,
+	pic = function()
+		pr 'images/basement.png';
+		if seen('closet') then
+			pr ';images/basement_closet.png@439,26';
+			if not closet.opened then
+				pr ';images/basement_lock.png@527,335';
+			end
+		end
+	end,
 }
 -------------
 clothes = obj {
-	nam = 'одежда',
+	nam = img('images/inv_clothes.png')..'одежда',
 	inv = function(s)
 		p 'Моя одежда: футболка и шорты.';
 		if here() == basement then
@@ -134,7 +148,7 @@ gun = obj {
 	var {
 		charged = true;
 	},
-	nam = 'дробовик',
+	nam = img('images/inv_gun.png')..'дробовик',
 	inv = function(s)
 		p 'Дробовик.';
 		if s.charged then
@@ -146,6 +160,18 @@ gun = obj {
 	use = function(s, w)
 		if w == closet then
 			s.charged = false;
+		elseif not s.charged and w == pot then
+			p 'Я бы её раскурочил! Но нет патронов.';
+		elseif not s.charged and w == people then
+			p 'Может и можно было бы от них защититься, но у меня нет патронов.';
+		elseif not s.charged then
+			p 'Нет патронов...'
+		elseif w == darkness then
+			p 'Нет, палить во всё подряд я не буду!';
+		elseif w == table then
+			p 'Пусть стоит! Не надо ломать.';
+		elseif w == basement_door then
+			p 'Она и так открыта.';
 		end
 	end,
 }
@@ -164,17 +190,17 @@ basement_door = obj {
 }
 -------------
 candle = obj {
-	nam = 'свеча',
+	nam = img('images/inv_candle.png')..'свеча',
 	inv = [[Обычная свеча из воска. Уже использовалась, но ещё много осталось.]],
 }
 -------------
 matchbox = obj {
 	var {
-		notempty = true;
+		nonempty = true;
 	},
-	nam = 'спичечный коробок',
+	nam = img('images/inv_matchbox.png')..'спичечный коробок',
 	inv = function(s)
-		if s.notempty then
+		if s.nonempty then
 			p 'В нём только одна спичка';
 		else
 			p 'Коробок пуст.';
@@ -182,12 +208,13 @@ matchbox = obj {
 	end,
 	use = function(s, w)
 		if w == candle then
-			if s.notempty then
+			if s.nonempty then
 				put('closet', 'basement');
-				s.notempty = false;
+				s.nonempty = false;
 				p [[Я зажёг спичку, поднёс к свече. Однако внезапно
 воздух дёрнулся, и... спичка погасла. Я успел лишь заметить шкаф в комнате. Там может
 быть лестница. Правда на шкафу замок.]];
+				set_sound('sounds/match_fire.ogg');
 			else
 				p 'Коробок пуст.';
 			end
@@ -196,8 +223,13 @@ matchbox = obj {
 }
 -------------
 fork = obj {
-	nam = 'вилка',
+	nam = img('images/inv_fork.png')..'вилка',
 	inv = [[Алюминиевая пищевая вилка. Может ещё пригодится.]],
+	use = function(s, w)
+		if w == pot then
+			p 'Нечего есть. Кастрюля пустая.';
+		end
+	end,
 }
 -------------
 table = obj {
@@ -221,12 +253,13 @@ table = obj {
 }
 -------------
 rope = obj {
-	nam = 'верёвка',
+	nam = img('images/inv_rope.png')..'верёвка',
 	inv = [[Верёвка. На одном конце есть металлический крюк.]],
 	use = function(s, w)
 		if w == basement_door then
 			p 'Мне удалось крюк верёвки зацепить за петлю и выбраться из погреба.';
 			walk(build_kitchen);
+			set_sound('sounds/rope.ogg');
 		end
 	end,
 }
@@ -235,18 +268,20 @@ radio = obj {
 	var {
 		listened = false;
 	},
-	nam = 'радиоприёмник',
+	nam = img('images/inv_radio.png')..'радиоприёмник',
 	inv = function(s)
 		if here() == basement then
 			p 'Я включил радиоприёмник. Однако кроме помех ничего не услышал. Видимо, плохой приём.';
+			set_sound('sounds/radio_mush.ogg');
 		else
 			s.listened = true;
 			p [[Мне удалось поймать волну!^^
 "... Только особи, которые... безопасны... это могут быть особи, которые были вегетарианцами...
 до конца это явление не изучено... однако ни одна заражённая особь, которая кидалась на
-растительность... вроде коры дерева, не нападала на человека... Особей, которые проявляют хоть малейшую агрессию по отношению
-к человеку... ликвидировать..."^^
+растительность... вроде коры дерева, не нападала на человека... Особей, которые проявляют хоть малейшую агрессию
+по отношению к человеку... ликвидировать..."^^
 Что за бред?!]];
+			set_sound('sounds/radio.ogg');
 		end
 	end,
 }
@@ -276,6 +311,7 @@ closet = obj {
 		if w == gun then
 			s.opened = true;
 			p 'Я выстрелил в замок. Он свалился. Шкаф открыт.';
+			set_sound('sounds/shotgun_shot.ogg');
 		end
 	end
 }
@@ -283,7 +319,10 @@ closet = obj {
 pot = obj {
 	nam = 'кастрюля',
 	dsc = [[На полу стоит {кастрюля}.]],
-	act = [[Вот она! Из-за неё я упал!]];
+	act = function()
+		p 'Вот она! Из-за неё я упал!';
+		set_sound('sounds/pot_hit.ogg');
+	end
 }
 -------------
 goto_hayloft = obj {
@@ -296,6 +335,7 @@ build_kitchen = room {
 	nam = 'Кухня',
 	dsc = [[Кухня. Это точно кухня.]],
 	obj = {'pot'},
+	pic = 'images/kitchen.png',
 }
 -------------
 hayloft_screen = room {
@@ -311,13 +351,14 @@ hayloft_screen = room {
 Они начали спорить. А я вдруг задумался. Я всё понял. Я превращаюсь в зомби. Меня заразили.
 Моя рука... Как я раньше не заметил. На ней укус. Память... Она пропала. Я не человек...
 Но я хочу жить...^^
-{start_hayloft|Продолжить}.]],
+{start_hayloft|Продолжить ►}]],
 	obj = {
 		xact('start_hayloft', code[[walk(hayloft)]]),
 	},
 	enter = function()
 		set_music('music/hayloft.ogg');
 	end,
+	pic = 'images/hayloft.png',
 }
 -------------
 people = obj {
@@ -334,6 +375,7 @@ log = obj {
 		if w == fork and radio.listened then
 			p 'Вилка, бревно...';
 			walk(log_eat_screen);
+			set_sound('sounds/log_eat.ogg');
 		end
 	end,
 }
@@ -348,15 +390,25 @@ hayloft = room {
 	nam = 'Сеновал',
 	dsc = [[Сеновал. Довольно просторный сарай с сеном.]],
 	obj = {'people', 'log', 'run_away'},
+	enter = function()
+		set_music('music/hayloft.ogg');
+	end,
+	pic = 'images/hayloft.png',
 }
 -------------
 bad_end = room {
 	nam = 'Конец',
 	dsc = [[Я попытался убежать. Но раздались выстрелы. Я упал...^^
-{back_hayloft|Переиграть}.]],
+{back_hayloft|Переиграть ►}]],
 	obj = {
 		xact('back_hayloft', code[[walk(hayloft)]]),
 	},
+	hideinv = true,
+	pic = 'images/bad_end.png',
+	enter = function()
+		stop_music();
+		set_sound('sounds/shotgun_shot.ogg');
+	end,
 }
 -------------
 log_eat_screen = room {
@@ -370,6 +422,8 @@ log_eat_screen = room {
 	enter = function()
 		set_music('music/memory.ogg');
 	end,
+	hideinv = true,
+	pic = 'images/log_eat.png',
 }
 -------------
 happy_end = room {
@@ -381,12 +435,25 @@ happy_end = room {
 -- Круто ты с бревном придумал. Они поверили, что ты безопасен.^^
 -- А я безопасен был?^^
 -- Ты всех нас заразил. Но у нас было противоядие...^^
-{goto_end|Конец}.]],
+{goto_end|Конец ►}]],
 	obj = {xact('goto_end', code[[walk(the_end);]])},
+	hideinv = true,
+	enter = function()
+		stop_music();
+		set_sound('sounds/bump.ogg');
+	end,
+	pic = 'images/happy_end.png',
 }
 -------------
 the_end = room {
 	nam = 'Конец',
 	dsc = [[Автор: Евгений Ефремов (Jhekasoft)^^
-Спасибо Instead за движок, а Вжж! за бессонную ночь :)]],
+Спасибо Instead за движок, а Вжж! за бессонную ночь :)^^
+Музыка, изображения авторские.^^
+Звуки взяты с сайта freesound.org.]],
+	hideinv = true,
+	enter = function()
+		set_music('music/memory.ogg');
+	end,
+	pic = 'images/title.png',
 }
